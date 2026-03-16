@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OusiaWorld - AI Schoolm Workshop</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0F0A1E;
+    color: #F8FAFC;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 720px;
+    width: 100%;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #6C3CE1, #3B82F6);
+    color: white;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 20px;
+    border-radius: 50px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #fff, #A5B4FC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    color: #94A3B8;
+    font-weight: 300;
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: #1A1333;
+    border: 1px solid rgba(108,60,225,0.15);
+    border-radius: 20px;
+    padding: 32px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    background: #241B45;
+    border-color: rgba(108,60,225,0.35);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(108,60,225,0.15);
+  }
+
+  .card-num {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 48px;
+    font-weight: 700;
+    color: rgba(108,60,225,0.25);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 64px;
+    text-align: center;
+  }
+
+  .card:hover .card-num {
+    color: rgba(108,60,225,0.5);
+  }
+
+  .card-body {
+    flex: 1;
+  }
+
+  .card-label {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .card:nth-child(1) .card-label { color: #8B5CF6; }
+  .card:nth-child(2) .card-label { color: #10B981; }
+
+  .card h2 {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .card p {
+    font-size: 15px;
+    color: #94A3B8;
+    line-height: 1.5;
+  }
+
+  .card-meta {
+    font-size: 13px;
+    color: #475569;
+    margin-top: 10px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .card-arrow {
+    font-size: 24px;
+    color: #475569;
+    flex-shrink: 0;
+    transition: all 0.3s;
+  }
+
+  .card:hover .card-arrow {
+    color: #8B5CF6;
+    transform: translateX(4px);
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 56px;
+    color: #475569;
+    font-size: 13px;
+    font-family: 'Space Grotesk', monospace;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 36px; }
+    .card { flex-direction: column; text-align: center; gap: 12px; }
+    .card-meta { justify-content: center; }
+    .card-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <span class="tag">AI Schoolm</span>
+      <h1>OusiaWorld<br>Workshop</h1>
+      <p class="subtitle">0→1 App Builder (Google Edition)</p>
+    </div>
+
+    <div class="cards">
+      <a href="workshop/00_kickoff_presentation.html" class="card">
+        <div class="card-num">01</div>
+        <div class="card-body">
+          <div class="card-label">Kickoff</div>
+          <h2>Welcome to OusiaWorld</h2>
+          <p>Program overview, tech stack, 4-week roadmap, builder mindset, and project ideas.</p>
+          <div class="card-meta">
+            <span>10 slides</span>
+            <span>5 min read</span>
+          </div>
+        </div>
+        <span class="card-arrow">→</span>
+      </a>
+
+      <a href="workshop/01_lets_try_ai_presentation.html" class="card">
+        <div class="card-num">02</div>
+        <div class="card-body">
+          <div class="card-label">Hands-On</div>
+          <h2>Let's Try AI!</h2>
+          <p>Gemini prompting tutorial, 3 exercises, prompt templates, and your first assignment.</p>
+          <div class="card-meta">
+            <span>12 slides</span>
+            <span>30 min workshop</span>
+          </div>
+        </div>
+        <span class="card-arrow">→</span>
+      </a>
+    </div>
+
+    <div class="footer">
+      OusiaWorld &copy; 2026
+    </div>
+  </div>
+</body>
+</html>
