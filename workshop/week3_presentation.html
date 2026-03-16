@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 3: No-Code App Building - OusiaWorld</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  :root {
+    --primary:#10B981;--primary-light:#34D399;--accent:#3B82F6;--accent-light:#60A5FA;
+    --success:#10B981;--danger:#EF4444;--warning:#F59E0B;--purple:#8B5CF6;
+    --bg:#091A14;--bg-card:#0F2920;--bg-code:#0D1117;
+    --text:#F1F5F9;--text2:#6EE7B7;--text3:#4B7A68;
+    --border:rgba(16,185,129,0.15);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;scroll-snap-type:y mandatory;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px 80px;scroll-snap-align:start;position:relative;}
+  .slide-inner{max-width:1100px;width:100%;z-index:1;}
+  .sn{position:absolute;bottom:28px;right:40px;font-family:'Space Grotesk',monospace;font-size:13px;color:var(--text3);letter-spacing:2px;}
+  .sb{position:absolute;bottom:24px;left:40px;font-family:'Space Grotesk',monospace;font-size:12px;color:var(--text3);}
+  .label{font-family:'Space Grotesk',monospace;font-size:13px;font-weight:600;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;color:var(--primary-light);}
+  h2{font-family:'Space Grotesk',monospace;font-size:48px;font-weight:700;margin-bottom:14px;line-height:1.2;}
+  .hl{background:linear-gradient(135deg,#10B981,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hl2{background:linear-gradient(135deg,#F59E0B,#EF4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hl3{background:linear-gradient(135deg,#8B5CF6,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .desc{font-size:20px;color:var(--text2);font-weight:300;max-width:700px;margin-bottom:40px;}
+  .title-slide{text-align:center;background:linear-gradient(180deg,#091A14,#0F2920,#091A14);}
+  .title-slide .week-badge{display:inline-block;background:linear-gradient(135deg,#10B981,#059669);padding:10px 28px;border-radius:50px;font-family:'Space Grotesk',monospace;font-size:14px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px;}
+  .title-slide h1{font-family:'Space Grotesk',monospace;font-size:72px;font-weight:700;line-height:1.1;margin-bottom:20px;}
+  .title-slide h1 .em{background:linear-gradient(135deg,#34D399,#60A5FA);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .title-slide .sub{font-size:22px;color:var(--text2);font-weight:300;}
+  .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+  .orb1{width:400px;height:400px;background:rgba(16,185,129,0.1);top:-80px;right:-60px;}
+  .orb2{width:300px;height:300px;background:rgba(59,130,246,0.06);bottom:-60px;left:10%;}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+  .card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all .3s;}
+  .card:hover{transform:translateY(-3px);border-color:rgba(16,185,129,0.3);}
+  .card h3{font-family:'Space Grotesk',monospace;font-size:18px;font-weight:600;margin-bottom:10px;}
+  .card p{font-size:15px;color:var(--text2);}
+  .card-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px;}
+  .prompt{background:var(--bg-code);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:20px;}
+  .prompt-head{display:flex;align-items:center;padding:10px 20px;background:rgba(16,185,129,0.06);border-bottom:1px solid rgba(16,185,129,0.1);}
+  .prompt-head span{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;}
+  .prompt-body{padding:20px 24px;font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.7;color:#34D399;white-space:pre-wrap;}
+  .ph{color:var(--warning);font-weight:600;}
+  .callout{background:var(--bg-card);border-left:4px solid var(--primary);border-radius:0 12px 12px 0;padding:20px 24px;margin-top:20px;}
+  .callout p{font-size:15px;color:var(--text2);} .callout strong{color:var(--text);}
+  .steps{list-style:none;}
+  .steps li{display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-bottom:1px solid rgba(16,185,129,0.08);font-size:16px;}
+  .steps li:last-child{border-bottom:none;}
+  .snum{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',monospace;font-size:16px;font-weight:700;flex-shrink:0;background:rgba(16,185,129,0.12);color:var(--primary-light);}
+  /* Flow */
+  .flow{display:flex;align-items:center;gap:16px;justify-content:center;margin:32px 0;}
+  .flow-box{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:28px 24px;text-align:center;flex:1;max-width:240px;}
+  .flow-box .fi{font-size:40px;margin-bottom:10px;}
+  .flow-box h3{font-family:'Space Grotesk',monospace;font-size:16px;margin-bottom:6px;}
+  .flow-box p{font-size:13px;color:var(--text2);}
+  .flow-arr{font-size:28px;color:var(--primary-light);}
+  /* Table Mock */
+  .sheet-mock{background:var(--bg-code);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+  .sheet-header{display:flex;background:rgba(16,185,129,0.08);border-bottom:1px solid rgba(16,185,129,0.12);}
+  .sheet-header div{flex:1;padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--primary-light);border-right:1px solid rgba(16,185,129,0.08);}
+  .sheet-header div:last-child{border-right:none;}
+  .sheet-row{display:flex;border-bottom:1px solid rgba(255,255,255,0.03);}
+  .sheet-row:last-child{border-bottom:none;}
+  .sheet-row div{flex:1;padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2);border-right:1px solid rgba(255,255,255,0.02);}
+  .sheet-row div:last-child{border-right:none;}
+  .vid-list{display:flex;flex-direction:column;gap:12px;}
+  .vid-item{display:flex;align-items:center;gap:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;}
+  .vid-num{font-family:'Space Grotesk',monospace;font-size:28px;font-weight:700;color:rgba(16,185,129,0.3);width:48px;text-align:center;flex-shrink:0;}
+  .vid-body h4{font-family:'Space Grotesk',monospace;font-size:16px;margin-bottom:4px;}
+  .vid-body p{font-size:14px;color:var(--text3);}
+  .vid-tag{font-size:11px;background:rgba(245,158,11,0.15);color:var(--warning);padding:3px 10px;border-radius:6px;font-weight:600;margin-left:auto;flex-shrink:0;}
+  .task-list{list-style:none;display:flex;flex-direction:column;gap:12px;max-width:600px;margin:32px auto 0;text-align:left;}
+  .task-list li{display:flex;gap:14px;align-items:center;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px 24px;font-size:16px;}
+  .task-badge{font-family:'Space Grotesk',monospace;font-size:11px;font-weight:700;background:linear-gradient(135deg,#10B981,#3B82F6);padding:5px 12px;border-radius:6px;flex-shrink:0;letter-spacing:1px;}
+  .nav-dots{position:fixed;right:20px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:100;}
+  .nav-dot{width:8px;height:8px;border-radius:50%;background:rgba(16,185,129,0.25);border:none;cursor:pointer;transition:all .3s;}
+  .nav-dot:hover,.nav-dot.active{background:var(--primary-light);transform:scale(1.4);}
+  @media(max-width:900px){.slide{padding:40px 20px;}.title-slide h1{font-size:42px;}h2{font-size:32px;}.g2,.g3{grid-template-columns:1fr;}.flow{flex-direction:column;}.flow-arr{transform:rotate(90deg);}.nav-dots{display:none;}}
+</style>
+</head>
+<body>
+<nav class="nav-dots" id="nav"></nav>
+
+<!-- S1: Title -->
+<section class="slide title-slide" id="s1">
+  <div class="orb orb1"></div><div class="orb orb2"></div>
+  <div class="slide-inner">
+    <span class="week-badge">Week 3</span>
+    <h1>No-Code<br><span class="em">App Building</span></h1>
+    <p class="sub">Google Sheets + AppSheet — Turn data into a real mobile app, no code required.</p>
+  </div>
+  <div class="sn">01 / 10</div>
+</section>
+
+<!-- S2: Goals -->
+<section class="slide" id="s2">
+  <div class="slide-inner">
+    <div class="label">This Week</div>
+    <h2>What You'll <span class="hl">Achieve</span></h2>
+    <p class="desc">The "Aha!" moment — your data becomes a real app you can install on your phone.</p>
+    <div class="g3">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(16,185,129,0.15);">📊</div>
+        <h3>Design Your Database</h3>
+        <p>Build a structured Google Sheet that powers your app's data.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(59,130,246,0.15);">📱</div>
+        <h3>Generate an App</h3>
+        <p>Watch AppSheet auto-create a mobile app from your spreadsheet.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(139,92,246,0.15);">🎨</div>
+        <h3>Customize the UI</h3>
+        <p>Brand colors, layouts, input forms — make it yours.</p>
+      </div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-box"><div class="fi">📊</div><h3>Google Sheets</h3><p>Your database</p></div>
+      <span class="flow-arr">→</span>
+      <div class="flow-box" style="border-color:rgba(16,185,129,0.4);"><div class="fi">✨</div><h3>AppSheet Magic</h3><p>Auto-generates app</p></div>
+      <span class="flow-arr">→</span>
+      <div class="flow-box"><div class="fi">📱</div><h3>Mobile App</h3><p>On your phone!</p></div>
+    </div>
+  </div>
+  <div class="sb">Week 3 · No-Code App Building</div><div class="sn">02 / 10</div>
+</section>
+
+<!-- S3: Videos -->
+<section class="slide" id="s3">
+  <div class="slide-inner">
+    <div class="label">Videos</div>
+    <h2>This Week's <span class="hl">Content</span></h2>
+    <p class="desc">4 videos to watch before the workshop.</p>
+    <div class="vid-list">
+      <div class="vid-item">
+        <div class="vid-num">09</div>
+        <div class="vid-body"><h4>Building the Database with Sheets & Gemini</h4><p>Ask Gemini what columns you need, then build the sheet.</p></div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-num">10</div>
+        <div class="vid-body"><h4>The Magic Moment — Sheets to AppSheet</h4><p>One click transforms your data into a mobile app.</p></div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-num">11</div>
+        <div class="vid-body"><h4>Customizing the UI & Input Forms</h4><p>Colors, layout, camera uploads, and more.</p></div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-num">12</div>
+        <div class="vid-body"><h4>Install the App on Your Own Phone!</h4><p>Deploy to your smartphone home screen.</p></div>
+        <span class="vid-tag">ACTION</span>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 3 · No-Code App Building</div><div class="sn">03 / 10</div>
+</section>
+
+<!-- S4: Database Design -->
+<section class="slide" id="s4">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--accent-light);">Video 9 Deep Dive</div>
+    <h2>Design Your <span class="hl">Database</span></h2>
+    <p class="desc">Your Google Sheet IS your database. Let Gemini help you design the structure.</p>
+
+    <div class="g2">
+      <div>
+        <div class="prompt">
+          <div class="prompt-head"><span>Database Design Prompt</span></div>
+          <div class="prompt-body">I'm building an app called <span class="ph">[APP NAME]</span>.
+It helps <span class="ph">[TARGET USERS]</span> to <span class="ph">[WHAT IT DOES]</span>.
+
+What Google Sheets columns do I need?
+
+Please provide:
+1. Sheet name
+2. Column headers with data types
+3. 5 sample rows of realistic Nigerian data
+4. Which column should be the unique ID?
+
+Format as a table I can copy into Google Sheets.</div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-family:'Space Grotesk',monospace;font-size:16px;margin-bottom:12px;">Example: BookSwap Database</h3>
+        <div class="sheet-mock">
+          <div class="sheet-header">
+            <div>BookID</div><div>Title</div><div>Price (₦)</div><div>Seller</div><div>Campus</div>
+          </div>
+          <div class="sheet-row">
+            <div>BK001</div><div>Intro to Physics</div><div>2,500</div><div>Chidi O.</div><div>UNILAG</div>
+          </div>
+          <div class="sheet-row">
+            <div>BK002</div><div>Business Law</div><div>3,000</div><div>Amina K.</div><div>UNILAG</div>
+          </div>
+          <div class="sheet-row">
+            <div>BK003</div><div>Organic Chem</div><div>1,800</div><div>Tunde A.</div><div>OAU</div>
+          </div>
+          <div class="sheet-row">
+            <div>BK004</div><div>Nigerian History</div><div>2,000</div><div>Ngozi E.</div><div>UNN</div>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:12px;">
+          <p><strong>Tip:</strong> Keep it simple! Start with 5-8 columns max. You can always add more later.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 3 · No-Code App Building</div><div class="sn">04 / 10</div>
+</section>
+
+<!-- S5: Sheets → AppSheet -->
+<section class="slide" id="s5">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--warning);">Video 10 — The Magic Moment</div>
+    <h2>Sheets → <span class="hl2">AppSheet</span></h2>
+    <p class="desc">This is where it all clicks. One button turns your spreadsheet into a working app.</p>
+
+    <div class="g2">
+      <div>
+        <h3 style="font-family:'Space Grotesk',monospace;font-size:20px;margin-bottom:16px;">Step by Step</h3>
+        <ul class="steps">
+          <li><span class="snum">1</span> Open your Google Sheet with data</li>
+          <li><span class="snum">2</span> Click <strong>Extensions</strong> in the menu bar</li>
+          <li><span class="snum">3</span> Select <strong>AppSheet → Create an app</strong></li>
+          <li><span class="snum">4</span> Wait 30 seconds...</li>
+          <li><span class="snum" style="background:rgba(16,185,129,0.15);color:var(--success);">✨</span> <strong style="color:var(--primary-light);">Your app is alive!</strong></li>
+        </ul>
+      </div>
+      <div>
+        <div class="card" style="border:2px solid rgba(16,185,129,0.3);text-align:center;padding:40px;">
+          <div style="font-size:64px;margin-bottom:16px;">🎉</div>
+          <h3 style="font-size:24px;margin-bottom:12px;">The "Aha!" Moment</h3>
+          <p style="font-size:17px;">AppSheet automatically creates:<br><br>
+            <span style="color:var(--primary-light);">✓ A list view</span> of all your data<br>
+            <span style="color:var(--primary-light);">✓ A detail view</span> for each item<br>
+            <span style="color:var(--primary-light);">✓ An input form</span> to add new data<br>
+            <span style="color:var(--primary-light);">✓ A search function</span> built-in
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 3 · No-Code App Building</div><div class="sn">05 / 10</div>
+</section>
+
+<!-- S6: Customization -->
+<section class="slide" id="s6">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--accent-light);">Video 11 Deep Dive</div>
+    <h2>Customize <span class="hl">Your App</span></h2>
+    <p class="desc">Make it look professional and match your brand.</p>
+
+    <div class="g3">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(139,92,246,0.15);">🎨</div>
+        <h3>Brand Colors</h3>
+        <p>Change the primary color to match your app's identity. Go to <strong>Theme</strong> in AppSheet settings.</p>
+        <div style="display:flex;gap:8px;margin-top:12px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:#10B981;"></div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#3B82F6;"></div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#8B5CF6;"></div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#EF4444;"></div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#F59E0B;"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(16,185,129,0.15);">📋</div>
+        <h3>View Types</h3>
+        <p>Choose how data appears:</p>
+        <ul style="list-style:none;padding:0;margin-top:8px;">
+          <li style="font-size:14px;padding:4px 0;color:var(--text2);">📊 <strong>Table</strong> — spreadsheet view</li>
+          <li style="font-size:14px;padding:4px 0;color:var(--text2);">🃏 <strong>Card</strong> — image + text cards</li>
+          <li style="font-size:14px;padding:4px 0;color:var(--text2);">📍 <strong>Map</strong> — location-based</li>
+          <li style="font-size:14px;padding:4px 0;color:var(--text2);">📅 <strong>Calendar</strong> — date-based</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(59,130,246,0.15);">📸</div>
+        <h3>Input Forms</h3>
+        <p>Add powerful input types:</p>
+        <ul style="list-style:none;padding:0;margin-top:8px;">
+          <li style="font-size:14px;padding:4px 0;color:var(--text2);">📸 Camera — photo upload</li>
+          <li style="font-size:14px;padding:4px 0;color:var(--text2);">📍 GPS — auto-location</li>
+          <li style="font-size:14px;padding:4px 0;color:var(--text2);">📅 Date picker</li>
+          <li style="font-size:14px;padding:4px 0;color:var(--text2);">⬇️ Dropdown menus</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 3 · No-Code App Building</div><div class="sn">06 / 10</div>
+</section>
+
+<!-- S7: Workshop - Build Together -->
+<section class="slide" id="s7">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--success);">Workshop Exercise</div>
+    <h2>Build Your App <span class="hl">Together</span></h2>
+    <p class="desc">Follow these steps during the workshop. Ask for help if you get stuck!</p>
+
+    <div class="g2">
+      <div>
+        <h3 style="font-family:'Space Grotesk',monospace;font-size:18px;margin-bottom:12px;">Part 1: Database (15 min)</h3>
+        <ul class="steps">
+          <li><span class="snum">1</span> Use Gemini to design your columns</li>
+          <li><span class="snum">2</span> Create a new Google Sheet</li>
+          <li><span class="snum">3</span> Add column headers (Row 1)</li>
+          <li><span class="snum">4</span> Add 5-10 sample data rows</li>
+          <li><span class="snum">5</span> Double-check: no empty rows, no merged cells</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-family:'Space Grotesk',monospace;font-size:18px;margin-bottom:12px;">Part 2: App Creation (15 min)</h3>
+        <ul class="steps">
+          <li><span class="snum">6</span> Extensions → AppSheet → Create an app</li>
+          <li><span class="snum">7</span> Explore the auto-generated app</li>
+          <li><span class="snum">8</span> Change the app name and icon</li>
+          <li><span class="snum">9</span> Pick your brand color</li>
+          <li><span class="snum">10</span> Add a camera or GPS input field</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:20px;border-color:var(--warning);">
+      <p><strong>Common Mistakes to Avoid:</strong><br>
+      ❌ Empty rows in the middle of your data<br>
+      ❌ Merged cells (AppSheet can't read them)<br>
+      ❌ Column names with special characters<br>
+      ❌ More than one sheet of data (start with one!)</p>
+    </div>
+  </div>
+  <div class="sb">Week 3 · No-Code App Building</div><div class="sn">07 / 10</div>
+</section>
+
+<!-- S8: Data Types -->
+<section class="slide" id="s8">
+  <div class="slide-inner">
+    <div class="label">Reference</div>
+    <h2>Column <span class="hl">Data Types</span></h2>
+    <p class="desc">AppSheet understands different types of data. Use the right type for the right column.</p>
+
+    <div class="g2">
+      <div class="sheet-mock">
+        <div class="sheet-header"><div style="flex:1.5;">Data Type</div><div style="flex:1;">Example</div><div style="flex:2;">When to Use</div></div>
+        <div class="sheet-row"><div style="flex:1.5;color:var(--primary-light);font-weight:600;">Text</div><div style="flex:1;">Chidi O.</div><div style="flex:2;">Names, descriptions, addresses</div></div>
+        <div class="sheet-row"><div style="flex:1.5;color:var(--accent-light);font-weight:600;">Number</div><div style="flex:1;">2500</div><div style="flex:2;">Prices, quantities, ratings</div></div>
+        <div class="sheet-row"><div style="flex:1.5;color:var(--warning);font-weight:600;">Date</div><div style="flex:1;">2026-03-15</div><div style="flex:2;">Events, deadlines, orders</div></div>
+        <div class="sheet-row"><div style="flex:1.5;color:var(--purple);font-weight:600;">Image</div><div style="flex:1;">[photo URL]</div><div style="flex:2;">Product photos, profile pics</div></div>
+        <div class="sheet-row"><div style="flex:1.5;color:var(--success);font-weight:600;">Enum</div><div style="flex:1;">Available</div><div style="flex:2;">Status, categories, sizes</div></div>
+        <div class="sheet-row"><div style="flex:1.5;color:var(--danger);font-weight:600;">Yes/No</div><div style="flex:1;">TRUE</div><div style="flex:2;">Active/inactive, sold/available</div></div>
+      </div>
+      <div>
+        <div class="prompt">
+          <div class="prompt-head"><span>Ask Gemini for Help</span></div>
+          <div class="prompt-body" style="font-size:13px;">My app <span class="ph">[APP NAME]</span> has these columns:
+<span class="ph">[LIST YOUR COLUMNS]</span>
+
+For each column, tell me:
+1. The best AppSheet data type
+2. Whether it should be required
+3. A good default value (if any)
+4. Whether to show it in the list view or detail view only</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 3 · No-Code App Building</div><div class="sn">08 / 10</div>
+</section>
+
+<!-- S9: Deploy -->
+<section class="slide" id="s9">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--warning);">Video 12</div>
+    <h2>Install on <span class="hl2">Your Phone!</span></h2>
+    <p class="desc">Your app goes from browser to your phone's home screen.</p>
+
+    <div class="g2">
+      <div>
+        <h3 style="font-family:'Space Grotesk',monospace;font-size:20px;margin-bottom:16px;">Android</h3>
+        <ul class="steps">
+          <li><span class="snum">1</span> Open your app in AppSheet preview</li>
+          <li><span class="snum">2</span> Tap the <strong>Share</strong> button</li>
+          <li><span class="snum">3</span> Select <strong>"Add to Home Screen"</strong></li>
+          <li><span class="snum" style="background:rgba(16,185,129,0.12);color:var(--success);">✓</span> <strong style="color:var(--success);">It's now on your phone like a real app!</strong></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-family:'Space Grotesk',monospace;font-size:20px;margin-bottom:16px;">iPhone</h3>
+        <ul class="steps">
+          <li><span class="snum">1</span> Open your app link in <strong>Safari</strong></li>
+          <li><span class="snum">2</span> Tap the <strong>Share</strong> icon (box with arrow)</li>
+          <li><span class="snum">3</span> Scroll down, tap <strong>"Add to Home Screen"</strong></li>
+          <li><span class="snum" style="background:rgba(16,185,129,0.12);color:var(--success);">✓</span> <strong style="color:var(--success);">Done! Looks like a native app!</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:24px;border-color:var(--primary);text-align:center;">
+      <p style="font-size:20px;color:var(--primary-light);">
+        <strong>You just built an app. Without writing a single line of code.</strong>
+      </p>
+    </div>
+  </div>
+  <div class="sb">Week 3 · No-Code App Building</div><div class="sn">09 / 10</div>
+</section>
+
+<!-- S10: Action -->
+<section class="slide" id="s10">
+  <div class="orb orb1"></div><div class="orb orb2"></div>
+  <div class="slide-inner" style="text-align:center;">
+    <div class="label" style="color:var(--warning);">Action Item</div>
+    <h2>Install on <span class="hl2">Your Phone!</span></h2>
+    <p class="desc" style="margin:0 auto 32px;text-align:center;">Deploy your app and test it live. This is YOUR app!</p>
+    <ul class="task-list">
+      <li><span class="task-badge">TASK 1</span> Create your Google Sheet database with 10+ rows</li>
+      <li><span class="task-badge">TASK 2</span> Generate your AppSheet app and customize colors</li>
+      <li><span class="task-badge">TASK 3</span> Install the app on your phone's home screen</li>
+      <li><span class="task-badge">TASK 4</span> Screenshot your app and share in Discord #week3-apps</li>
+    </ul>
+    <p style="margin-top:40px;color:var(--text2);font-size:18px;">
+      Next week → <strong style="color:var(--warning);">Integration & Launch — Go Live!</strong>
+    </p>
+  </div>
+</section>
+
+<script>
+  const slides=document.querySelectorAll('.slide'),nav=document.getElementById('nav');
+  slides.forEach((_,i)=>{const d=document.createElement('button');d.className='nav-dot';d.onclick=()=>slides[i].scrollIntoView({behavior:'smooth'});nav.appendChild(d);});
+  slides.forEach(s=>new IntersectionObserver(e=>e.forEach(en=>{if(en.isIntersecting){const i=Array.from(slides).indexOf(en.target);document.querySelectorAll('.nav-dot').forEach((d,j)=>d.classList.toggle('active',j===i));}}),{threshold:.5}).observe(s));
+  document.addEventListener('keydown',e=>{const c=Array.from(slides).findIndex(s=>{const r=s.getBoundingClientRect();return r.top>=-100&&r.top<=innerHeight/2;});if(['ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();if(c<slides.length-1)slides[c+1].scrollIntoView({behavior:'smooth'});}else if(['ArrowUp','PageUp'].includes(e.key)){e.preventDefault();if(c>0)slides[c-1].scrollIntoView({behavior:'smooth'});}});
+</script>
+</body>
+</html>

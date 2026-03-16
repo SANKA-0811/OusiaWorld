@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 4: Integration & Launch - OusiaWorld</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  :root {
+    --primary:#F59E0B;--primary-light:#FCD34D;--accent:#EF4444;--accent-light:#FCA5A5;
+    --success:#10B981;--blue:#3B82F6;--purple:#8B5CF6;
+    --bg:#1A1008;--bg-card:#261C10;--bg-code:#0D1117;
+    --text:#F1F5F9;--text2:#FDE68A;--text3:#92713A;
+    --border:rgba(245,158,11,0.15);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;scroll-snap-type:y mandatory;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+  .slide{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px 80px;scroll-snap-align:start;position:relative;}
+  .slide-inner{max-width:1100px;width:100%;z-index:1;}
+  .sn{position:absolute;bottom:28px;right:40px;font-family:'Space Grotesk',monospace;font-size:13px;color:var(--text3);letter-spacing:2px;}
+  .sb{position:absolute;bottom:24px;left:40px;font-family:'Space Grotesk',monospace;font-size:12px;color:var(--text3);}
+  .label{font-family:'Space Grotesk',monospace;font-size:13px;font-weight:600;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;color:var(--primary-light);}
+  h2{font-family:'Space Grotesk',monospace;font-size:48px;font-weight:700;margin-bottom:14px;line-height:1.2;}
+  .hl{background:linear-gradient(135deg,#F59E0B,#EF4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hl2{background:linear-gradient(135deg,#10B981,#3B82F6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .hl3{background:linear-gradient(135deg,#8B5CF6,#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .desc{font-size:20px;color:var(--text2);font-weight:300;max-width:700px;margin-bottom:40px;}
+  .title-slide{text-align:center;background:linear-gradient(180deg,#1A1008,#261C10,#1A1008);}
+  .title-slide .week-badge{display:inline-block;background:linear-gradient(135deg,#F59E0B,#EF4444);padding:10px 28px;border-radius:50px;font-family:'Space Grotesk',monospace;font-size:14px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px;color:#fff;}
+  .title-slide h1{font-family:'Space Grotesk',monospace;font-size:72px;font-weight:700;line-height:1.1;margin-bottom:20px;}
+  .title-slide h1 .em{background:linear-gradient(135deg,#FCD34D,#FCA5A5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .title-slide .sub{font-size:22px;color:var(--text2);font-weight:300;}
+  .orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
+  .orb1{width:400px;height:400px;background:rgba(245,158,11,0.1);top:-80px;right:-60px;}
+  .orb2{width:300px;height:300px;background:rgba(239,68,68,0.06);bottom:-60px;left:10%;}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+  .card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all .3s;}
+  .card:hover{transform:translateY(-3px);border-color:rgba(245,158,11,0.3);}
+  .card h3{font-family:'Space Grotesk',monospace;font-size:18px;font-weight:600;margin-bottom:10px;}
+  .card p{font-size:15px;color:var(--text2);}
+  .card-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px;}
+  .prompt{background:var(--bg-code);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:20px;}
+  .prompt-head{display:flex;align-items:center;padding:10px 20px;background:rgba(245,158,11,0.06);border-bottom:1px solid rgba(245,158,11,0.1);}
+  .prompt-head span{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;}
+  .prompt-body{padding:20px 24px;font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.7;color:#FCD34D;white-space:pre-wrap;}
+  .ph{color:#FCA5A5;font-weight:600;}
+  .callout{background:var(--bg-card);border-left:4px solid var(--primary);border-radius:0 12px 12px 0;padding:20px 24px;margin-top:20px;}
+  .callout p{font-size:15px;color:var(--text2);} .callout strong{color:var(--text);}
+  .steps{list-style:none;}
+  .steps li{display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-bottom:1px solid rgba(245,158,11,0.08);font-size:16px;}
+  .steps li:last-child{border-bottom:none;}
+  .snum{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',monospace;font-size:16px;font-weight:700;flex-shrink:0;background:rgba(245,158,11,0.12);color:var(--primary-light);}
+  .vid-list{display:flex;flex-direction:column;gap:12px;}
+  .vid-item{display:flex;align-items:center;gap:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;}
+  .vid-num{font-family:'Space Grotesk',monospace;font-size:28px;font-weight:700;color:rgba(245,158,11,0.3);width:48px;text-align:center;flex-shrink:0;}
+  .vid-body h4{font-family:'Space Grotesk',monospace;font-size:16px;margin-bottom:4px;}
+  .vid-body p{font-size:14px;color:var(--text3);}
+  .vid-tag{font-size:11px;background:rgba(239,68,68,0.15);color:var(--accent);padding:3px 10px;border-radius:6px;font-weight:600;margin-left:auto;flex-shrink:0;}
+  /* Landing Page Mock */
+  .lp-mock{background:#fff;border-radius:14px;overflow:hidden;color:#1F2937;max-width:500px;}
+  .lp-hero{background:linear-gradient(135deg,#F59E0B,#EF4444);padding:40px 28px;text-align:center;color:#fff;}
+  .lp-hero h3{font-family:'Space Grotesk',monospace;font-size:24px;margin-bottom:8px;}
+  .lp-hero p{font-size:14px;opacity:0.9;}
+  .lp-body{padding:24px 28px;}
+  .lp-body h4{font-family:'Space Grotesk',monospace;font-size:16px;margin-bottom:12px;color:#1F2937;}
+  .lp-feature{display:flex;gap:10px;align-items:center;padding:8px 0;font-size:14px;color:#4B5563;}
+  .lp-cta{display:block;background:linear-gradient(135deg,#F59E0B,#EF4444);color:#fff;text-align:center;padding:14px;border-radius:10px;font-weight:600;margin-top:16px;text-decoration:none;font-size:16px;}
+  /* Countdown */
+  .countdown{display:flex;gap:20px;justify-content:center;margin:32px 0;}
+  .cd-item{text-align:center;}
+  .cd-num{font-family:'Space Grotesk',monospace;font-size:56px;font-weight:700;background:linear-gradient(135deg,#F59E0B,#EF4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
+  .cd-label{font-size:13px;color:var(--text3);margin-top:4px;text-transform:uppercase;letter-spacing:2px;}
+  /* Tracks */
+  .track-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:32px;position:relative;overflow:hidden;}
+  .track-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+  .track-card:nth-child(1)::before{background:linear-gradient(90deg,#3B82F6,#06B6D4);}
+  .track-card:nth-child(2)::before{background:linear-gradient(90deg,#F59E0B,#EF4444);}
+  .track-card h3{font-family:'Space Grotesk',monospace;font-size:22px;margin-bottom:12px;}
+  .track-card p{font-size:15px;color:var(--text2);margin-bottom:16px;}
+  .track-list{list-style:none;padding:0;}
+  .track-list li{padding:8px 0;font-size:14px;color:var(--text2);border-bottom:1px solid rgba(245,158,11,0.06);}
+  .track-list li:last-child{border-bottom:none;}
+  /* Big CTA */
+  .big-cta{text-align:center;background:linear-gradient(180deg,#261C10,#1A1008);}
+  .task-list{list-style:none;display:flex;flex-direction:column;gap:12px;max-width:600px;margin:32px auto 0;text-align:left;}
+  .task-list li{display:flex;gap:14px;align-items:center;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px 24px;font-size:16px;}
+  .task-badge{font-family:'Space Grotesk',monospace;font-size:11px;font-weight:700;background:linear-gradient(135deg,#F59E0B,#EF4444);padding:5px 12px;border-radius:6px;flex-shrink:0;letter-spacing:1px;}
+  .nav-dots{position:fixed;right:20px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:100;}
+  .nav-dot{width:8px;height:8px;border-radius:50%;background:rgba(245,158,11,0.25);border:none;cursor:pointer;transition:all .3s;}
+  .nav-dot:hover,.nav-dot.active{background:var(--primary-light);transform:scale(1.4);}
+  @media(max-width:900px){.slide{padding:40px 20px;}.title-slide h1{font-size:42px;}h2{font-size:32px;}.g2,.g3{grid-template-columns:1fr;}.nav-dots{display:none;}.countdown{gap:12px;}.cd-num{font-size:36px;}}
+</style>
+</head>
+<body>
+<nav class="nav-dots" id="nav"></nav>
+
+<!-- S1: Title -->
+<section class="slide title-slide" id="s1">
+  <div class="orb orb1"></div><div class="orb orb2"></div>
+  <div class="slide-inner">
+    <span class="week-badge">Week 4 — Final Week</span>
+    <h1>Integration &<br><span class="em">Launch</span></h1>
+    <p class="sub">Add finishing touches, create a landing page, and go live to the world.</p>
+  </div>
+  <div class="sn">01 / 11</div>
+</section>
+
+<!-- S2: Goals -->
+<section class="slide" id="s2">
+  <div class="slide-inner">
+    <div class="label">This Week</div>
+    <h2>What You'll <span class="hl">Achieve</span></h2>
+    <p class="desc">This is it. You launch your app to real people and become a builder.</p>
+    <div class="g3">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(245,158,11,0.15);">🧠</div>
+        <h3>Add AI Features</h3>
+        <p>Integrate AppSheet's built-in AI to make your app truly smart.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(239,68,68,0.15);">🌐</div>
+        <h3>Build a Landing Page</h3>
+        <p>Create a professional one-page website with Google Sites in 5 minutes.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(16,185,129,0.15);">🚀</div>
+        <h3>Launch to 50 People</h3>
+        <p>Share your app with real users and collect your first feedback.</p>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 4 · Integration & Launch</div><div class="sn">02 / 11</div>
+</section>
+
+<!-- S3: Videos -->
+<section class="slide" id="s3">
+  <div class="slide-inner">
+    <div class="label">Videos</div>
+    <h2>This Week's <span class="hl">Content</span></h2>
+    <p class="desc">4 final videos — from AI integration to your public launch.</p>
+    <div class="vid-list">
+      <div class="vid-item">
+        <div class="vid-num">13</div>
+        <div class="vid-body"><h4>Integrating AI Intelligence into the App</h4><p>Smart Assistant, OCR, and AI features in AppSheet.</p></div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-num">14</div>
+        <div class="vid-body"><h4>Building a Landing Page in 5 Minutes</h4><p>Gemini writes the copy, Google Sites makes it real.</p></div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-num">15</div>
+        <div class="vid-body"><h4>Launch! Send the Link to 50 People</h4><p>The terrifying, thrilling moment of going live.</p></div>
+        <span class="vid-tag">LAUNCH!</span>
+      </div>
+      <div class="vid-item">
+        <div class="vid-num">16</div>
+        <div class="vid-body"><h4>Next Steps — Become a Founder in OusiaWorld</h4><p>Month 2 specialization tracks and startup path.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 4 · Integration & Launch</div><div class="sn">03 / 11</div>
+</section>
+
+<!-- S4: AI Features -->
+<section class="slide" id="s4">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--accent-light);">Video 13 Deep Dive</div>
+    <h2>Add AI <span class="hl">Intelligence</span></h2>
+    <p class="desc">Elevate your app from a simple database to a smart tool.</p>
+
+    <div class="g3">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(59,130,246,0.15);">🤖</div>
+        <h3>Smart Assistant</h3>
+        <p>AppSheet can auto-suggest actions based on user behavior. Enable in Settings → Intelligence.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(139,92,246,0.15);">📷</div>
+        <h3>OCR (Text from Images)</h3>
+        <p>Users can snap a photo and the app reads text from it. Great for receipts, labels, or documents.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(16,185,129,0.15);">📊</div>
+        <h3>Predictive Models</h3>
+        <p>AppSheet can learn patterns from your data and make predictions (e.g., price estimates).</p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:20px;">
+      <p><strong>Start simple:</strong> You don't need ALL of these features. Pick the ONE that makes the biggest difference for your users. You can always add more later.</p>
+    </div>
+  </div>
+  <div class="sb">Week 4 · Integration & Launch</div><div class="sn">04 / 11</div>
+</section>
+
+<!-- S5: Landing Page -->
+<section class="slide" id="s5">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--accent-light);">Video 14 Deep Dive</div>
+    <h2>Landing Page in <span class="hl">5 Minutes</span></h2>
+    <p class="desc">Use Gemini to write the copy, then paste it into Google Sites.</p>
+
+    <div class="g2">
+      <div>
+        <div class="prompt">
+          <div class="prompt-head"><span>Landing Page Copy Prompt</span></div>
+          <div class="prompt-body">Write landing page copy for my app:
+
+App Name: <span class="ph">[NAME]</span>
+What it does: <span class="ph">[ONE LINE]</span>
+Target user: <span class="ph">[WHO]</span>
+
+Write these sections:
+1. Hero headline (max 8 words)
+2. Subheadline (1 sentence)
+3. Three feature bullets with icons
+4. Call-to-action button text
+5. Social proof line (e.g. "Join 50+ students already using...")
+
+Keep it punchy. No corporate jargon.</div>
+        </div>
+      </div>
+      <div>
+        <div class="lp-mock">
+          <div class="lp-hero">
+            <h3>BookSwap</h3>
+            <p>Buy & sell textbooks on campus. No stress.</p>
+          </div>
+          <div class="lp-body">
+            <h4>Why Students Love It</h4>
+            <div class="lp-feature">📚 Find any textbook in 30 seconds</div>
+            <div class="lp-feature">💰 Save up to 70% vs bookshops</div>
+            <div class="lp-feature">🤝 Connect directly with sellers on campus</div>
+            <a class="lp-cta" href="#">Try BookSwap Free →</a>
+            <p style="text-align:center;font-size:12px;color:#9CA3AF;margin-top:12px;">Join 50+ UNILAG students already using BookSwap</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 4 · Integration & Launch</div><div class="sn">05 / 11</div>
+</section>
+
+<!-- S6: Google Sites Steps -->
+<section class="slide" id="s6">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--success);">Workshop Exercise</div>
+    <h2>Build on <span class="hl2">Google Sites</span></h2>
+    <p class="desc">Step-by-step: from blank page to published landing page.</p>
+
+    <div class="g2">
+      <div>
+        <ul class="steps">
+          <li><span class="snum">1</span> Go to <strong style="color:var(--primary-light);">sites.google.com</strong></li>
+          <li><span class="snum">2</span> Click <strong>"Blank"</strong> to create a new site</li>
+          <li><span class="snum">3</span> Add a <strong>hero section</strong> with your headline</li>
+          <li><span class="snum">4</span> Add a <strong>text section</strong> with your 3 features</li>
+          <li><span class="snum">5</span> Add a <strong>button</strong> linking to your AppSheet app</li>
+          <li><span class="snum">6</span> Click <strong>"Publish"</strong> in top right</li>
+          <li><span class="snum">7</span> Choose a custom URL name</li>
+          <li><span class="snum" style="background:rgba(16,185,129,0.12);color:var(--success);">✓</span> <strong style="color:var(--success);">Your landing page is LIVE!</strong></li>
+        </ul>
+      </div>
+      <div>
+        <div class="card" style="border:2px solid rgba(245,158,11,0.3);">
+          <h3>Landing Page Checklist</h3>
+          <ul style="list-style:none;padding:0;">
+            <li style="padding:10px 0;font-size:15px;color:var(--text2);border-bottom:1px solid rgba(245,158,11,0.06);">✅ Clear headline — what does the app do?</li>
+            <li style="padding:10px 0;font-size:15px;color:var(--text2);border-bottom:1px solid rgba(245,158,11,0.06);">✅ 3 feature bullets — why should I care?</li>
+            <li style="padding:10px 0;font-size:15px;color:var(--text2);border-bottom:1px solid rgba(245,158,11,0.06);">✅ Call-to-action button — try the app!</li>
+            <li style="padding:10px 0;font-size:15px;color:var(--text2);border-bottom:1px solid rgba(245,158,11,0.06);">✅ Your app link — connects to AppSheet</li>
+            <li style="padding:10px 0;font-size:15px;color:var(--text2);">✅ Mobile-friendly — test on phone!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 4 · Integration & Launch</div><div class="sn">06 / 11</div>
+</section>
+
+<!-- S7: Launch Countdown -->
+<section class="slide" id="s7">
+  <div class="slide-inner" style="text-align:center;">
+    <div class="label" style="color:var(--accent);">Video 15</div>
+    <h2>It's <span class="hl">Launch Day</span></h2>
+    <p class="desc" style="text-align:center;margin:0 auto 24px;">The terrifying but thrilling moment. You're about to share your creation with the world.</p>
+
+    <div class="countdown">
+      <div class="cd-item"><div class="cd-num">50</div><div class="cd-label">People</div></div>
+      <div class="cd-item"><div class="cd-num">1</div><div class="cd-label">Link</div></div>
+      <div class="cd-item"><div class="cd-num">∞</div><div class="cd-label">Potential</div></div>
+    </div>
+
+    <div class="g3" style="margin-top:32px;">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;">👨‍👩‍👧‍👦</div>
+        <h3>Friends & Family</h3>
+        <p>Start with 20 people you know. WhatsApp groups, personal messages.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;">🎓</div>
+        <h3>Classmates</h3>
+        <p>Share in your department group chats. They ARE your target users.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:36px;margin-bottom:12px;">🌐</div>
+        <h3>Social Media</h3>
+        <p>Post on Twitter/X, Instagram Stories. Use your elevator pitch!</p>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 4 · Integration & Launch</div><div class="sn">07 / 11</div>
+</section>
+
+<!-- S8: Launch Message -->
+<section class="slide" id="s8">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--success);">Workshop Exercise</div>
+    <h2>Write Your <span class="hl2">Launch Message</span></h2>
+    <p class="desc">Use Gemini to craft the perfect message for sharing your app.</p>
+
+    <div class="g2">
+      <div>
+        <div class="prompt">
+          <div class="prompt-head"><span>WhatsApp Launch Message</span></div>
+          <div class="prompt-body">Write a WhatsApp message to share my new app with friends.
+
+App: <span class="ph">[APP NAME]</span>
+What it does: <span class="ph">[ONE LINE]</span>
+Link: <span class="ph">[YOUR LINK]</span>
+
+Requirements:
+- Short (max 5 lines)
+- Casual and friendly tone
+- Include the link
+- Ask them to try it and give feedback
+- Add 1-2 relevant emojis</div>
+        </div>
+      </div>
+      <div>
+        <div class="prompt">
+          <div class="prompt-head"><span>Twitter/X Launch Post</span></div>
+          <div class="prompt-body">Write a tweet announcing my new app.
+
+App: <span class="ph">[APP NAME]</span>
+What it does: <span class="ph">[ONE LINE]</span>
+Link: <span class="ph">[YOUR LINK]</span>
+
+Requirements:
+- Under 280 characters
+- Exciting but authentic
+- Include link
+- Include 2-3 hashtags
+- Sound like a real person, not a company</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 4 · Integration & Launch</div><div class="sn">08 / 11</div>
+</section>
+
+<!-- S9: Collect Feedback -->
+<section class="slide" id="s9">
+  <div class="slide-inner">
+    <div class="label">Post-Launch</div>
+    <h2>Collect <span class="hl">Feedback</span></h2>
+    <p class="desc">Your first users are your best teachers. Listen carefully.</p>
+
+    <div class="g2">
+      <div>
+        <div class="prompt">
+          <div class="prompt-head"><span>Feedback Survey Prompt</span></div>
+          <div class="prompt-body">Create a short feedback survey for my app <span class="ph">[APP NAME]</span>.
+
+5 questions only:
+1. Did you find it easy to use? (1-5 scale)
+2. What did you like most?
+3. What was confusing or frustrating?
+4. Would you use it again? Why?
+5. What ONE feature would you add?
+
+Format as a Google Form I can create quickly.</div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="border-top:3px solid var(--primary);">
+          <h3>What to Do with Feedback</h3>
+          <ul class="steps">
+            <li><span class="snum">1</span> <strong>Don't take it personally</strong> — criticism = growth</li>
+            <li><span class="snum">2</span> <strong>Look for patterns</strong> — if 3+ people say the same thing, fix it</li>
+            <li><span class="snum">3</span> <strong>Quick wins first</strong> — fix easy problems immediately</li>
+            <li><span class="snum">4</span> <strong>Thank every user</strong> — they're helping you build</li>
+            <li><span class="snum">5</span> <strong>Share improvements</strong> — "You asked, we built it!"</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 4 · Integration & Launch</div><div class="sn">09 / 11</div>
+</section>
+
+<!-- S10: Next Steps -->
+<section class="slide" id="s10">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--purple);">Video 16</div>
+    <h2>What's <span class="hl3">Next</span>?</h2>
+    <p class="desc">You've proven you can build. Now choose your path in Month 2.</p>
+
+    <div class="g2">
+      <div class="track-card">
+        <h3 style="color:var(--blue);">🏗️ Engineering Track</h3>
+        <p>Deepen your technical skills and build more complex apps.</p>
+        <ul class="track-list">
+          <li>📱 Advanced AppSheet (workflows, automation)</li>
+          <li>🔗 API integrations (connect external services)</li>
+          <li>📊 Data analytics and dashboards</li>
+          <li>🤖 Advanced AI with custom models</li>
+        </ul>
+      </div>
+      <div class="track-card">
+        <h3 style="color:var(--primary);">💼 Business Track</h3>
+        <p>Turn your app into a real startup with users and revenue.</p>
+        <ul class="track-list">
+          <li>📈 Growth strategies (get to 500 users)</li>
+          <li>💰 Monetization models for Nigerian market</li>
+          <li>🤝 Partnership and distribution</li>
+          <li>📋 Pitch deck for investors</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:24px;text-align:center;border-color:var(--purple);">
+      <p style="font-size:18px;color:var(--purple);">
+        <strong>Both tracks lead to the same place: becoming a founder in OusiaWorld.</strong>
+      </p>
+    </div>
+  </div>
+  <div class="sb">Week 4 · Integration & Launch</div><div class="sn">10 / 11</div>
+</section>
+
+<!-- S11: Grand Finale -->
+<section class="slide big-cta" id="s11">
+  <div class="orb orb1"></div><div class="orb orb2"></div>
+  <div class="slide-inner" style="text-align:center;">
+    <div class="label" style="color:var(--accent);">Congratulations</div>
+    <h2>You Are Now<br>a <span class="hl">Builder.</span></h2>
+
+    <div style="display:flex;gap:24px;justify-content:center;margin:32px 0;">
+      <div class="card" style="text-align:center;flex:1;max-width:200px;">
+        <div style="font-size:36px;margin-bottom:8px;">📱</div>
+        <h3 style="font-size:14px;">Working App</h3>
+        <p style="font-size:13px;">On your phone</p>
+      </div>
+      <div class="card" style="text-align:center;flex:1;max-width:200px;">
+        <div style="font-size:36px;margin-bottom:8px;">🌐</div>
+        <h3 style="font-size:14px;">Landing Page</h3>
+        <p style="font-size:13px;">Live on the web</p>
+      </div>
+      <div class="card" style="text-align:center;flex:1;max-width:200px;">
+        <div style="font-size:36px;margin-bottom:8px;">👥</div>
+        <h3 style="font-size:14px;">Real Users</h3>
+        <p style="font-size:13px;">50+ people</p>
+      </div>
+      <div class="card" style="text-align:center;flex:1;max-width:200px;">
+        <div style="font-size:36px;margin-bottom:8px;">🔥</div>
+        <h3 style="font-size:14px;">Builder Mindset</h3>
+        <p style="font-size:13px;">Forever</p>
+      </div>
+    </div>
+
+    <p style="font-size:24px;color:var(--text2);margin-top:24px;">
+      4 weeks ago, you had an idea.<br>
+      <strong style="color:var(--primary-light);">Today, you have an app.</strong>
+    </p>
+    <p style="font-size:18px;color:var(--text3);margin-top:24px;font-family:'Space Grotesk',monospace;">
+      Welcome to OusiaWorld. This is just the beginning.
+    </p>
+  </div>
+</section>
+
+<script>
+  const slides=document.querySelectorAll('.slide'),nav=document.getElementById('nav');
+  slides.forEach((_,i)=>{const d=document.createElement('button');d.className='nav-dot';d.onclick=()=>slides[i].scrollIntoView({behavior:'smooth'});nav.appendChild(d);});
+  slides.forEach(s=>new IntersectionObserver(e=>e.forEach(en=>{if(en.isIntersecting){const i=Array.from(slides).indexOf(en.target);document.querySelectorAll('.nav-dot').forEach((d,j)=>d.classList.toggle('active',j===i));}}),{threshold:.5}).observe(s));
+  document.addEventListener('keydown',e=>{const c=Array.from(slides).findIndex(s=>{const r=s.getBoundingClientRect();return r.top>=-100&&r.top<=innerHeight/2;});if(['ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();if(c<slides.length-1)slides[c+1].scrollIntoView({behavior:'smooth'});}else if(['ArrowUp','PageUp'].includes(e.key)){e.preventDefault();if(c>0)slides[c-1].scrollIntoView({behavior:'smooth'});}});
+</script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 1: Ideation & Gemini - OusiaWorld</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  :root {
+    --primary: #8B5CF6; --primary-light: #A78BFA; --accent: #F59E0B; --accent-light: #FCD34D;
+    --success: #10B981; --danger: #EF4444; --blue: #3B82F6;
+    --bg: #0F0A1E; --bg-card: #1A1333; --bg-code: #0D1117;
+    --text: #F1F5F9; --text2: #A5B4FC; --text3: #6B7280;
+    --border: rgba(139,92,246,0.15);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; scroll-snap-type:y mandatory; }
+  body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  .slide { min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:60px 80px; scroll-snap-align:start; position:relative; }
+  .slide-inner { max-width:1100px; width:100%; z-index:1; }
+  .sn { position:absolute; bottom:28px; right:40px; font-family:'Space Grotesk',monospace; font-size:13px; color:var(--text3); letter-spacing:2px; }
+  .sb { position:absolute; bottom:24px; left:40px; font-family:'Space Grotesk',monospace; font-size:12px; color:var(--text3); }
+  .label { font-family:'Space Grotesk',monospace; font-size:13px; font-weight:600; letter-spacing:3px; text-transform:uppercase; margin-bottom:14px; color:var(--primary-light); }
+  h2 { font-family:'Space Grotesk',monospace; font-size:48px; font-weight:700; margin-bottom:14px; line-height:1.2; }
+  .hl { background:linear-gradient(135deg,#8B5CF6,#3B82F6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .hl2 { background:linear-gradient(135deg,#F59E0B,#EF4444); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .hl3 { background:linear-gradient(135deg,#10B981,#3B82F6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .desc { font-size:20px; color:var(--text2); font-weight:300; max-width:700px; margin-bottom:40px; }
+  /* Title */
+  .title-slide { text-align:center; background:linear-gradient(180deg,#0F0A1E,#1A1040,#0F0A1E); }
+  .title-slide .week-badge { display:inline-block; background:linear-gradient(135deg,#8B5CF6,#6D28D9); padding:10px 28px; border-radius:50px; font-family:'Space Grotesk',monospace; font-size:14px; font-weight:600; letter-spacing:2px; text-transform:uppercase; margin-bottom:28px; }
+  .title-slide h1 { font-family:'Space Grotesk',monospace; font-size:72px; font-weight:700; line-height:1.1; margin-bottom:20px; }
+  .title-slide h1 .em { background:linear-gradient(135deg,#A78BFA,#60A5FA); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .title-slide .sub { font-size:22px; color:var(--text2); font-weight:300; }
+  .orb { position:absolute; border-radius:50%; filter:blur(80px); pointer-events:none; }
+  .orb1 { width:400px;height:400px;background:rgba(139,92,246,0.12);top:-80px;right:-60px; }
+  .orb2 { width:300px;height:300px;background:rgba(245,158,11,0.08);bottom:-60px;left:10%; }
+  /* Cards */
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:28px; transition:all .3s; }
+  .card:hover { transform:translateY(-3px); border-color:rgba(139,92,246,0.3); }
+  .card h3 { font-family:'Space Grotesk',monospace; font-size:18px; font-weight:600; margin-bottom:10px; }
+  .card p { font-size:15px; color:var(--text2); }
+  .card-icon { width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px; }
+  /* Prompt */
+  .prompt { background:var(--bg-code); border:1px solid rgba(139,92,246,0.15); border-radius:14px; overflow:hidden; margin-top:20px; }
+  .prompt-head { display:flex; align-items:center; justify-content:space-between; padding:10px 20px; background:rgba(139,92,246,0.06); border-bottom:1px solid rgba(139,92,246,0.1); }
+  .prompt-head span { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text3); letter-spacing:1px; text-transform:uppercase; }
+  .prompt-body { padding:20px 24px; font-family:'JetBrains Mono',monospace; font-size:14px; line-height:1.7; color:#6EE7B7; white-space:pre-wrap; }
+  .ph { color:var(--accent); font-weight:600; }
+  /* Callout */
+  .callout { background:var(--bg-card); border-left:4px solid var(--primary); border-radius:0 12px 12px 0; padding:20px 24px; margin-top:20px; }
+  .callout p { font-size:15px; color:var(--text2); }
+  .callout strong { color:var(--text); }
+  /* Steps */
+  .steps { list-style:none; }
+  .steps li { display:flex; align-items:flex-start; gap:16px; padding:16px 0; border-bottom:1px solid rgba(139,92,246,0.08); font-size:17px; }
+  .steps li:last-child { border-bottom:none; }
+  .snum { width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',monospace;font-size:16px;font-weight:700;flex-shrink:0; background:rgba(139,92,246,0.12);color:var(--primary-light); }
+  /* Video List */
+  .vid-list { display:flex; flex-direction:column; gap:12px; }
+  .vid-item { display:flex; align-items:center; gap:16px; background:var(--bg-card); border:1px solid var(--border); border-radius:14px; padding:20px 24px; }
+  .vid-num { font-family:'Space Grotesk',monospace; font-size:28px; font-weight:700; color:rgba(139,92,246,0.3); width:48px; text-align:center; flex-shrink:0; }
+  .vid-body h4 { font-family:'Space Grotesk',monospace; font-size:16px; margin-bottom:4px; }
+  .vid-body p { font-size:14px; color:var(--text3); }
+  .vid-tag { font-size:11px; background:rgba(245,158,11,0.15); color:var(--accent); padding:3px 10px; border-radius:6px; font-weight:600; margin-left:auto; flex-shrink:0; }
+  /* Compare */
+  .compare { display:grid; grid-template-columns:1fr 1fr; gap:0; border-radius:14px; overflow:hidden; margin-top:20px; }
+  .compare-bad, .compare-good { padding:24px; }
+  .compare-bad { background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.12); }
+  .compare-good { background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.12); }
+  .compare-label { font-family:'Space Grotesk',monospace; font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:12px; }
+  .compare-bad .compare-label { color:var(--danger); }
+  .compare-good .compare-label { color:var(--success); }
+  .compare-text { font-family:'JetBrains Mono',monospace; font-size:14px; line-height:1.6; }
+  .compare-bad .compare-text { color:#FCA5A5; }
+  .compare-good .compare-text { color:#6EE7B7; }
+  /* CTA */
+  .cta { text-align:center; }
+  .cta h2 { font-size:52px; margin-bottom:20px; }
+  .task-list { list-style:none; display:flex; flex-direction:column; gap:12px; max-width:600px; margin:32px auto 0; text-align:left; }
+  .task-list li { display:flex; gap:14px; align-items:center; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:18px 24px; font-size:16px; }
+  .task-badge { font-family:'Space Grotesk',monospace; font-size:11px; font-weight:700; background:linear-gradient(135deg,#8B5CF6,#3B82F6); padding:5px 12px; border-radius:6px; flex-shrink:0; letter-spacing:1px; }
+  /* Nav */
+  .nav-dots { position:fixed; right:20px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:8px; z-index:100; }
+  .nav-dot { width:8px;height:8px;border-radius:50%;background:rgba(139,92,246,0.25);border:none;cursor:pointer;transition:all .3s; }
+  .nav-dot:hover,.nav-dot.active { background:var(--primary-light); transform:scale(1.4); }
+  @media(max-width:900px) {
+    .slide{padding:40px 20px;} .title-slide h1{font-size:42px;} h2{font-size:32px;}
+    .g2,.g3,.compare{grid-template-columns:1fr;} .nav-dots{display:none;}
+  }
+</style>
+</head>
+<body>
+<nav class="nav-dots" id="nav"></nav>
+
+<!-- S1: Title -->
+<section class="slide title-slide" id="s1">
+  <div class="orb orb1"></div><div class="orb orb2"></div>
+  <div class="slide-inner">
+    <span class="week-badge">Week 1</span>
+    <h1>Ideation &<br><span class="em">Gemini</span></h1>
+    <p class="sub">Your AI Co-Founder — Find real problems, shape them into product ideas.</p>
+  </div>
+  <div class="sn">01 / 10</div>
+</section>
+
+<!-- S2: This Week's Goal -->
+<section class="slide" id="s2">
+  <div class="slide-inner">
+    <div class="label">This Week</div>
+    <h2>What You'll <span class="hl">Achieve</span></h2>
+    <p class="desc">By the end of Week 1, you will have a clear app idea and a polished elevator pitch.</p>
+    <div class="g3">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(139,92,246,0.15);">🔍</div>
+        <h3>Find Real Problems</h3>
+        <p>Use Gemini to discover 10+ daily frustrations in your community.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(245,158,11,0.15);">💎</div>
+        <h3>Define Your MVP</h3>
+        <p>Narrow down to one problem and shape a Minimum Viable Product.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(16,185,129,0.15);">🎤</div>
+        <h3>Pitch Your Idea</h3>
+        <p>Craft a 30-second elevator pitch and share it with the community.</p>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 1 · Ideation & Gemini</div><div class="sn">02 / 10</div>
+</section>
+
+<!-- S3: Video Overview -->
+<section class="slide" id="s3">
+  <div class="slide-inner">
+    <div class="label">Videos</div>
+    <h2>This Week's <span class="hl">Content</span></h2>
+    <p class="desc">4 short videos to watch before the workshop.</p>
+    <div class="vid-list">
+      <div class="vid-item">
+        <div class="vid-num">01</div>
+        <div class="vid-body">
+          <h4>Welcome to OusiaWorld!</h4>
+          <p>Mindset shift: you are a creator, not a coder.</p>
+        </div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-num">02</div>
+        <div class="vid-body">
+          <h4>Finding Local "Pains" with Gemini</h4>
+          <p>Hands-on prompting to brainstorm 10 daily challenges.</p>
+        </div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-num">03</div>
+        <div class="vid-body">
+          <h4>Crafting the Perfect Elevator Pitch</h4>
+          <p>Refine your idea into an MVP definition.</p>
+        </div>
+      </div>
+      <div class="vid-item">
+        <div class="vid-num">04</div>
+        <div class="vid-body">
+          <h4>Pitch Your Idea to the Community!</h4>
+          <p>Share your pitch and get peer feedback.</p>
+        </div>
+        <span class="vid-tag">ACTION</span>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 1 · Ideation & Gemini</div><div class="sn">03 / 10</div>
+</section>
+
+<!-- S4: Finding Pains -->
+<section class="slide" id="s4">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--accent);">Video 2 Deep Dive</div>
+    <h2>Finding Local <span class="hl2">"Pains"</span></h2>
+    <p class="desc">The best apps solve real problems. Let's use Gemini to find them.</p>
+
+    <div class="g2">
+      <div>
+        <h3 style="font-family:'Space Grotesk',monospace;font-size:20px;margin-bottom:16px;">Where to Look for Problems</h3>
+        <ul class="steps">
+          <li><span class="snum">1</span> Your daily routine — what annoys you?</li>
+          <li><span class="snum">2</span> Your campus — what's inefficient?</li>
+          <li><span class="snum">3</span> Your community — what costs people time or money?</li>
+          <li><span class="snum">4</span> Your market — what's overpriced or unavailable?</li>
+        </ul>
+      </div>
+      <div>
+        <div class="prompt">
+          <div class="prompt-head"><span>Try This Prompt</span></div>
+          <div class="prompt-body">I am a university student in <span class="ph">[YOUR CITY]</span>, Nigeria.
+
+What are 10 daily frustrations that students face related to:
+- Getting around campus and the city
+- Buying food and essentials
+- Studying and accessing materials
+- Managing money
+
+For each, explain WHY it's frustrating and HOW OFTEN it happens.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 1 · Ideation & Gemini</div><div class="sn">04 / 10</div>
+</section>
+
+<!-- S5: Deep Dive into a Problem -->
+<section class="slide" id="s5">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--success);">Workshop Exercise</div>
+    <h2>Go <span class="hl3">Deeper</span></h2>
+    <p class="desc">Pick the ONE problem that excites you most. Now interrogate it with Gemini.</p>
+
+    <div class="prompt">
+      <div class="prompt-head"><span>Problem Analysis Prompt</span></div>
+      <div class="prompt-body">I want to solve this problem: <span class="ph">[DESCRIBE THE PROBLEM]</span>
+
+Help me understand it deeply:
+1. WHO suffers from this the most? (Be specific — age, location, situation)
+2. WHY does this problem still exist? What's stopping people from fixing it?
+3. HOW do people currently deal with it? (Workarounds, alternatives)
+4. WHAT would the perfect solution look like?
+5. HOW MUCH would someone pay to have this solved? (Or how much time would they save?)</div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Key Insight:</strong> The best problems to solve are ones where people already spend time or money on bad workarounds. If nobody cares enough to even try a workaround, the problem might not be worth solving.</p>
+    </div>
+  </div>
+  <div class="sb">Week 1 · Ideation & Gemini</div><div class="sn">05 / 10</div>
+</section>
+
+<!-- S6: MVP Definition -->
+<section class="slide" id="s6">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--accent);">Video 3 Deep Dive</div>
+    <h2>Define Your <span class="hl2">MVP</span></h2>
+    <p class="desc">Minimum Viable Product — the simplest version of your app that still solves the problem.</p>
+
+    <div class="g2">
+      <div class="card" style="border-top:3px solid var(--primary);">
+        <h3>MVP = Only the Essentials</h3>
+        <ul class="steps">
+          <li><span class="snum" style="background:rgba(16,185,129,0.12);color:var(--success);">✓</span> Solves ONE core problem</li>
+          <li><span class="snum" style="background:rgba(16,185,129,0.12);color:var(--success);">✓</span> Has maximum 3 features</li>
+          <li><span class="snum" style="background:rgba(16,185,129,0.12);color:var(--success);">✓</span> Can be built in 2 weeks</li>
+          <li><span class="snum" style="background:rgba(239,68,68,0.12);color:var(--danger);">✗</span> NOT a full platform with 20 features</li>
+        </ul>
+      </div>
+      <div>
+        <div class="prompt">
+          <div class="prompt-head"><span>MVP Definition Prompt</span></div>
+          <div class="prompt-body">I want to build an app that solves: <span class="ph">[PROBLEM]</span>
+
+Help me define the MVP:
+1. App Name (catchy, memorable)
+2. One-line description (max 15 words)
+3. Target user (specific person)
+4. Top 3 features ONLY
+5. What it does NOT include (scope limits)
+6. How users will access it (phone app via AppSheet)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 1 · Ideation & Gemini</div><div class="sn">06 / 10</div>
+</section>
+
+<!-- S7: Good vs Bad Ideas -->
+<section class="slide" id="s7">
+  <div class="slide-inner">
+    <div class="label">Evaluation</div>
+    <h2>Is Your Idea <span class="hl">Good Enough</span>?</h2>
+    <p class="desc">Use this checklist to evaluate your app idea before moving forward.</p>
+
+    <div class="g3">
+      <div class="card" style="border-top:3px solid var(--success);">
+        <h3 style="color:var(--success);">Strong Idea</h3>
+        <ul style="list-style:none;padding:0;">
+          <li style="padding:8px 0;font-size:14px;color:var(--text2);">✅ You personally experience the problem</li>
+          <li style="padding:8px 0;font-size:14px;color:var(--text2);">✅ 10+ people you know have this problem</li>
+          <li style="padding:8px 0;font-size:14px;color:var(--text2);">✅ People currently waste time/money on it</li>
+          <li style="padding:8px 0;font-size:14px;color:var(--text2);">✅ Can be built with Google tools</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid var(--accent);">
+        <h3 style="color:var(--accent);">Needs Work</h3>
+        <ul style="list-style:none;padding:0;">
+          <li style="padding:8px 0;font-size:14px;color:var(--text2);">⚠️ Only you have this problem</li>
+          <li style="padding:8px 0;font-size:14px;color:var(--text2);">⚠️ Too many features planned</li>
+          <li style="padding:8px 0;font-size:14px;color:var(--text2);">⚠️ Unclear who the user is</li>
+          <li style="padding:8px 0;font-size:14px;color:var(--text2);">⚠️ Similar free solutions exist</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid var(--danger);">
+        <h3 style="color:var(--danger);">Restart</h3>
+        <ul style="list-style:none;padding:0;">
+          <li style="padding:8px 0;font-size:14px;color:var(--text2);">❌ Can't explain it in one sentence</li>
+          <li style="padding:8px 0;font-size:14px;color:var(--text2);">❌ Needs complex technology</li>
+          <li style="padding:8px 0;font-size:14px;color:var(--text2);">❌ No one would pay or save time</li>
+          <li style="padding:8px 0;font-size:14px;color:var(--text2);">❌ You're not excited about it</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 1 · Ideation & Gemini</div><div class="sn">07 / 10</div>
+</section>
+
+<!-- S8: Elevator Pitch -->
+<section class="slide" id="s8">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--accent);">Video 3 Exercise</div>
+    <h2>Craft Your <span class="hl2">Elevator Pitch</span></h2>
+    <p class="desc">30 seconds. 4 sentences. Make someone care about your idea.</p>
+
+    <div class="prompt">
+      <div class="prompt-head"><span>Pitch Formula</span></div>
+      <div class="prompt-body">Help me write a 30-second elevator pitch using this formula:
+
+1. THE PROBLEM: "<span class="ph">[TARGET USERS]</span> struggle with <span class="ph">[PROBLEM]</span> every day."
+2. THE PAIN: "This costs them <span class="ph">[TIME/MONEY/STRESS]</span>."
+3. THE SOLUTION: "<span class="ph">[APP NAME]</span> solves this by <span class="ph">[HOW IT WORKS]</span>."
+4. THE HOOK: "Imagine <span class="ph">[BENEFIT — paint a picture]</span>."
+
+Make it conversational, not corporate. Use simple English.</div>
+    </div>
+
+    <div class="compare" style="margin-top:20px;">
+      <div class="compare-bad">
+        <div class="compare-label">Weak Pitch</div>
+        <div class="compare-text">"My app is a platform that leverages AI to optimize the textbook acquisition process for educational stakeholders."</div>
+      </div>
+      <div class="compare-good">
+        <div class="compare-label">Strong Pitch</div>
+        <div class="compare-text">"Students at UNILAG spend 3 hours hunting for affordable textbooks every semester. BookSwap lets you buy and sell used textbooks on campus in 2 taps. No more overpriced bookshops."</div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 1 · Ideation & Gemini</div><div class="sn">08 / 10</div>
+</section>
+
+<!-- S9: Peer Review -->
+<section class="slide" id="s9">
+  <div class="slide-inner">
+    <div class="label" style="color:var(--success);">Workshop Activity</div>
+    <h2>Peer <span class="hl3">Review</span></h2>
+    <p class="desc">Share your pitch with a partner. Use this framework to give feedback.</p>
+
+    <div class="g2">
+      <div class="card">
+        <h3>When Listening to a Pitch</h3>
+        <ul class="steps">
+          <li><span class="snum">1</span> Can you explain the idea back in your own words?</li>
+          <li><span class="snum">2</span> Would YOU use this app? Why or why not?</li>
+          <li><span class="snum">3</span> What's the most exciting part?</li>
+          <li><span class="snum">4</span> What's unclear or confusing?</li>
+          <li><span class="snum">5</span> Who else do you know that has this problem?</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Improve with Gemini</h3>
+        <div class="prompt" style="margin-top:12px;">
+          <div class="prompt-body" style="font-size:13px;">I got this feedback on my pitch:
+<span class="ph">[PASTE FEEDBACK]</span>
+
+My current pitch:
+<span class="ph">[YOUR PITCH]</span>
+
+Help me improve the pitch based on this feedback. Keep it under 4 sentences.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sb">Week 1 · Ideation & Gemini</div><div class="sn">09 / 10</div>
+</section>
+
+<!-- S10: Action & Assignment -->
+<section class="slide cta" id="s10">
+  <div class="orb orb1"></div><div class="orb orb2"></div>
+  <div class="slide-inner">
+    <div class="label" style="color:var(--accent);">Action Item</div>
+    <h2>Pitch to the <span class="hl2">Community!</span></h2>
+    <p class="desc" style="margin:0 auto 32px;text-align:center;">Share your finalized pitch in the OusiaWorld Discord and get feedback.</p>
+    <ul class="task-list">
+      <li><span class="task-badge">TASK 1</span> Finalize your elevator pitch (max 4 sentences)</li>
+      <li><span class="task-badge">TASK 2</span> Post it in the Discord #week1-pitches channel</li>
+      <li><span class="task-badge">TASK 3</span> Give feedback on at least 2 other pitches</li>
+      <li><span class="task-badge">TASK 4</span> Prepare for Week 2: Sign up for Google AI Studio</li>
+    </ul>
+    <p style="text-align:center;margin-top:40px;color:var(--text2);font-size:18px;">
+      Next week → <strong style="color:var(--primary-light);">The AI Brain (Google AI Studio)</strong>
+    </p>
+  </div>
+</section>
+
+<script>
+  const slides=document.querySelectorAll('.slide'),nav=document.getElementById('nav');
+  slides.forEach((_,i)=>{const d=document.createElement('button');d.className='nav-dot';d.onclick=()=>slides[i].scrollIntoView({behavior:'smooth'});nav.appendChild(d);});
+  new IntersectionObserver(e=>e.forEach(en=>{if(en.isIntersecting){const i=Array.from(slides).indexOf(en.target);document.querySelectorAll('.nav-dot').forEach((d,j)=>d.classList.toggle('active',j===i));}}),{threshold:.5}).observe(document.querySelectorAll('.slide')[0]);
+  slides.forEach(s=>new IntersectionObserver(e=>e.forEach(en=>{if(en.isIntersecting){const i=Array.from(slides).indexOf(en.target);document.querySelectorAll('.nav-dot').forEach((d,j)=>d.classList.toggle('active',j===i));}}),{threshold:.5}).observe(s));
+  document.addEventListener('keydown',e=>{const c=Array.from(slides).findIndex(s=>{const r=s.getBoundingClientRect();return r.top>=-100&&r.top<=innerHeight/2;});if(['ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();if(c<slides.length-1)slides[c+1].scrollIntoView({behavior:'smooth'});}else if(['ArrowUp','PageUp'].includes(e.key)){e.preventDefault();if(c>0)slides[c-1].scrollIntoView({behavior:'smooth'});}});
+</script>
+</body>
+</html>
