@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OusiaWorld 0→1 App Builder - Kickoff</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  :root {
+    --primary: #6C3CE1;
+    --primary-light: #8B5CF6;
+    --primary-dark: #4C1D95;
+    --accent: #F59E0B;
+    --accent-light: #FCD34D;
+    --success: #10B981;
+    --bg-dark: #0F0A1E;
+    --bg-card: #1A1333;
+    --bg-card-hover: #241B45;
+    --text-primary: #F8FAFC;
+    --text-secondary: #A5B4FC;
+    --text-muted: #6B7280;
+    --gradient-1: linear-gradient(135deg, #6C3CE1, #3B82F6);
+    --gradient-2: linear-gradient(135deg, #F59E0B, #EF4444);
+    --gradient-3: linear-gradient(135deg, #10B981, #3B82F6);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  .slide {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    scroll-snap-align: start;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 50%, rgba(108,60,225,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .slide-inner {
+    max-width: 1100px;
+    width: 100%;
+    z-index: 1;
+  }
+
+  /* Slide Number */
+  .slide-number {
+    position: absolute;
+    bottom: 30px;
+    right: 40px;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 14px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+  }
+
+  /* Title Slide */
+  .slide-title {
+    background: linear-gradient(180deg, #0F0A1E 0%, #1A1040 100%);
+  }
+
+  .slide-title .logo {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary-light);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .slide-title h1 {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 72px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #fff 0%, #A5B4FC 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .slide-title h1 span {
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .slide-title .subtitle {
+    font-size: 22px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    max-width: 700px;
+    margin-bottom: 48px;
+  }
+
+  .slide-title .badge {
+    display: inline-block;
+    background: var(--gradient-1);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 24px;
+    border-radius: 50px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Decorative Elements */
+  .hero-grid {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(108,60,225,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108,60,225,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .hero-orb-1 {
+    width: 500px; height: 500px;
+    background: rgba(108,60,225,0.15);
+    top: -100px; right: -100px;
+  }
+
+  .hero-orb-2 {
+    width: 300px; height: 300px;
+    background: rgba(245,158,11,0.1);
+    bottom: -50px; left: 10%;
+  }
+
+  /* Section Headers */
+  h2 {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  h2 .highlight {
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .section-label {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    font-size: 20px;
+    color: var(--text-secondary);
+    font-weight: 300;
+    max-width: 700px;
+    margin-bottom: 48px;
+  }
+
+  /* Quote Slide */
+  .quote-block {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .quote-block .quote-mark {
+    font-size: 80px;
+    color: var(--primary-light);
+    font-family: Georgia, serif;
+    line-height: 1;
+    margin-bottom: -20px;
+  }
+
+  .quote-block blockquote {
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--text-primary);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  .quote-block blockquote strong {
+    color: var(--accent);
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    gap: 20px;
+  }
+
+  .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .card-grid-5 { grid-template-columns: repeat(5, 1fr); }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid rgba(108,60,225,0.15);
+    border-radius: 16px;
+    padding: 32px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card:hover {
+    background: var(--bg-card-hover);
+    border-color: rgba(108,60,225,0.3);
+    transform: translateY(-4px);
+  }
+
+  .card-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  .card h3 {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+  }
+
+  .card p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Tech Stack Card */
+  .tech-card {
+    text-align: center;
+    padding: 28px 16px;
+  }
+
+  .tech-card .card-icon {
+    margin: 0 auto 16px;
+    width: 64px;
+    height: 64px;
+    font-size: 32px;
+  }
+
+  .tech-card h3 {
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+
+  .tech-card p {
+    font-size: 13px;
+  }
+
+  /* Week Timeline */
+  .week-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+    align-items: stretch;
+  }
+
+  .week-badge {
+    min-width: 100px;
+    background: var(--gradient-1);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+    text-align: center;
+  }
+
+  .week-badge .week-num {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .week-badge .week-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.8;
+    margin-top: 4px;
+  }
+
+  .week-content {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid rgba(108,60,225,0.12);
+    border-radius: 14px;
+    padding: 24px 28px;
+  }
+
+  .week-content h3 {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .week-content .week-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .week-videos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .video-tag {
+    font-size: 12px;
+    background: rgba(108,60,225,0.12);
+    color: var(--text-secondary);
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+
+  .video-tag.action {
+    background: rgba(245,158,11,0.15);
+    color: var(--accent);
+  }
+
+  /* Flow Diagram */
+  .flow-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  .flow-step {
+    background: var(--bg-card);
+    border: 1px solid rgba(108,60,225,0.15);
+    border-radius: 16px;
+    padding: 28px 24px;
+    text-align: center;
+    flex: 1;
+    max-width: 280px;
+  }
+
+  .flow-step .step-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+  }
+
+  .flow-step h3 {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .flow-step p {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .flow-arrow {
+    font-size: 28px;
+    color: var(--primary-light);
+  }
+
+  /* Checklist */
+  .checklist {
+    list-style: none;
+    padding: 0;
+  }
+
+  .checklist li {
+    font-size: 22px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(108,60,225,0.1);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .checklist li:last-child { border-bottom: none; }
+
+  .check-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .check-icon.done { background: rgba(16,185,129,0.15); }
+  .check-icon.empty { background: rgba(108,60,225,0.1); border: 2px solid rgba(108,60,225,0.2); }
+
+  /* Mindset Cards */
+  .mindset-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .mindset-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(108,60,225,0.12);
+    border-radius: 16px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mindset-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+  }
+
+  .mindset-card:nth-child(1)::before { background: var(--gradient-1); }
+  .mindset-card:nth-child(2)::before { background: var(--gradient-2); }
+  .mindset-card:nth-child(3)::before { background: var(--gradient-3); }
+  .mindset-card:nth-child(4)::before { background: linear-gradient(135deg, #EC4899, #8B5CF6); }
+
+  .mindset-card h3 {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .mindset-card p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Example Table */
+  .example-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+  }
+
+  .example-table th {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-align: left;
+    padding: 0 24px 12px;
+  }
+
+  .example-table td {
+    background: var(--bg-card);
+    padding: 20px 24px;
+    font-size: 16px;
+    color: var(--text-secondary);
+  }
+
+  .example-table td:first-child {
+    border-radius: 12px 0 0 12px;
+    border-left: 3px solid var(--primary);
+  }
+
+  .example-table td:last-child {
+    border-radius: 0 12px 12px 0;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* CTA Slide */
+  .cta-slide {
+    text-align: center;
+    background: linear-gradient(180deg, #1A1040 0%, #0F0A1E 100%);
+  }
+
+  .cta-slide h2 {
+    font-size: 56px;
+    margin-bottom: 24px;
+  }
+
+  .cta-points {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+
+  .cta-points li {
+    font-size: 18px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cta-points li .cta-dot {
+    width: 10px; height: 10px;
+    background: var(--success);
+    border-radius: 50%;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background: var(--gradient-1);
+    color: white;
+    font-family: 'Space Grotesk', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 18px 48px;
+    border-radius: 14px;
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 0.2s;
+  }
+
+  .cta-button:hover { transform: scale(1.05); }
+
+  /* Navigation */
+  .nav-dots {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+  }
+
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(108,60,225,0.3);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+  }
+
+  .nav-dot:hover, .nav-dot.active {
+    background: var(--primary-light);
+    transform: scale(1.3);
+  }
+
+  /* Footer */
+  .slide-footer {
+    position: absolute;
+    bottom: 24px;
+    left: 40px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: 'Space Grotesk', monospace;
+    letter-spacing: 1px;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .slide { padding: 40px 24px; }
+    .slide-title h1 { font-size: 42px; }
+    h2 { font-size: 32px; }
+    .card-grid-3, .card-grid-5 { grid-template-columns: 1fr 1fr; }
+    .mindset-grid { grid-template-columns: 1fr; }
+    .week-row { flex-direction: column; }
+    .flow-container { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .cta-points { flex-direction: column; align-items: center; }
+    .nav-dots { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Navigation Dots -->
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- SLIDE 1: Title -->
+<section class="slide slide-title" id="slide-1">
+  <div class="hero-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="slide-inner">
+    <div class="logo">AI Schoolm</div>
+    <h1>OusiaWorld<br><span>0→1</span> App Builder</h1>
+    <p class="subtitle">You don't need to know how to code. With just a Google account and an eye for solving problems, you are a creator.</p>
+    <span class="badge">Google Edition - Kickoff</span>
+  </div>
+  <div class="slide-number">01 / 09</div>
+</section>
+
+<!-- SLIDE 2: What is OusiaWorld -->
+<section class="slide" id="slide-2">
+  <div class="slide-inner">
+    <div class="section-label">About the Program</div>
+    <h2>What is <span class="highlight">OusiaWorld</span>?</h2>
+    <p class="section-desc">A 4-week hands-on program where you go from zero to launching your own app — without writing a single line of code.</p>
+
+    <div class="card-grid card-grid-3">
+      <div class="card">
+        <div class="card-icon" style="background: rgba(108,60,225,0.15);">🔍</div>
+        <h3>Find Real Problems</h3>
+        <p>Use AI to discover pain points in your community that are worth solving.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: rgba(16,185,129,0.15);">🛠️</div>
+        <h3>Build Smart Apps</h3>
+        <p>Create intelligent, AI-powered applications with no-code tools.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: rgba(245,158,11,0.15);">🚀</div>
+        <h3>Launch to Real Users</h3>
+        <p>Deploy your app and get it into the hands of 50+ real people.</p>
+      </div>
+    </div>
+
+    <div class="flow-container">
+      <div class="flow-step">
+        <div class="step-icon">📹</div>
+        <h3>Watch</h3>
+        <p>5-10 min video lessons</p>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="step-icon">💬</div>
+        <h3>Prompt</h3>
+        <p>Talk to AI, shape your idea</p>
+      </div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-step">
+        <div class="step-icon">⚡</div>
+        <h3>Build</h3>
+        <p>Create your app, ship it</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">OusiaWorld 0→1 App Builder</div>
+  <div class="slide-number">02 / 09</div>
+</section>
+
+<!-- SLIDE 3: Quote -->
+<section class="slide" id="slide-3">
+  <div class="slide-inner">
+    <div class="quote-block">
+      <div class="quote-mark">"</div>
+      <blockquote>This is not a lecture series.<br>This is a <strong>builder program</strong>.<br>You watch, you prompt, you build.</blockquote>
+    </div>
+  </div>
+  <div class="slide-footer">OusiaWorld 0→1 App Builder</div>
+  <div class="slide-number">03 / 09</div>
+</section>
+
+<!-- SLIDE 4: Tech Stack -->
+<section class="slide" id="slide-4">
+  <div class="slide-inner">
+    <div class="section-label">Your Toolkit</div>
+    <h2>The All-Google <span class="highlight">Tech Stack</span></h2>
+    <p class="section-desc">Everything you need is 100% free with a Google account. No downloads, no subscriptions, no credit card.</p>
+
+    <div class="card-grid card-grid-5">
+      <div class="card tech-card">
+        <div class="card-icon" style="background: linear-gradient(135deg, rgba(66,133,244,0.2), rgba(52,168,83,0.2));">✨</div>
+        <h3>Gemini</h3>
+        <p>Brainstorming & ideation</p>
+      </div>
+      <div class="card tech-card">
+        <div class="card-icon" style="background: rgba(234,67,53,0.15);">🧠</div>
+        <h3>AI Studio</h3>
+        <p>AI brain (Gemini 2.5 Pro)</p>
+      </div>
+      <div class="card tech-card">
+        <div class="card-icon" style="background: rgba(52,168,83,0.15);">📊</div>
+        <h3>Sheets</h3>
+        <p>App database</p>
+      </div>
+      <div class="card tech-card">
+        <div class="card-icon" style="background: rgba(66,133,244,0.15);">📱</div>
+        <h3>AppSheet</h3>
+        <p>No-code app builder</p>
+      </div>
+      <div class="card tech-card">
+        <div class="card-icon" style="background: rgba(251,188,4,0.15);">🌐</div>
+        <h3>Sites</h3>
+        <p>Landing page</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">OusiaWorld 0→1 App Builder</div>
+  <div class="slide-number">04 / 09</div>
+</section>
+
+<!-- SLIDE 5: 4-Week Journey -->
+<section class="slide" id="slide-5">
+  <div class="slide-inner">
+    <div class="section-label">Curriculum</div>
+    <h2>Your <span class="highlight">4-Week</span> Journey</h2>
+    <p class="section-desc" style="margin-bottom: 32px;">4 weeks. 16 videos. 1 launched app.</p>
+
+    <div class="week-row">
+      <div class="week-badge">
+        <span class="week-num">1</span>
+        <span class="week-label">Week</span>
+      </div>
+      <div class="week-content">
+        <h3>Ideation & Gemini</h3>
+        <p class="week-desc">Your AI Co-Founder — find real local problems and shape them into product ideas.</p>
+        <div class="week-videos">
+          <span class="video-tag">Welcome</span>
+          <span class="video-tag">Finding Pains</span>
+          <span class="video-tag">Elevator Pitch</span>
+          <span class="video-tag action">Pitch to Community</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-badge" style="background: linear-gradient(135deg, #3B82F6, #06B6D4);">
+        <span class="week-num">2</span>
+        <span class="week-label">Week</span>
+      </div>
+      <div class="week-content">
+        <h3>The AI Brain</h3>
+        <p class="week-desc">Google AI Studio & Gemini 2.5 Pro — build the intelligent backend of your app.</p>
+        <div class="week-videos">
+          <span class="video-tag">AI Studio Intro</span>
+          <span class="video-tag">System Instructions</span>
+          <span class="video-tag">Testing & Tuning</span>
+          <span class="video-tag action">Show Your AI Brain</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-badge" style="background: linear-gradient(135deg, #10B981, #059669);">
+        <span class="week-num">3</span>
+        <span class="week-label">Week</span>
+      </div>
+      <div class="week-content">
+        <h3>No-Code App Building</h3>
+        <p class="week-desc">Google AppSheet — turn your data into a fully functional mobile app.</p>
+        <div class="week-videos">
+          <span class="video-tag">Sheets Database</span>
+          <span class="video-tag">Sheets → AppSheet</span>
+          <span class="video-tag">Customize UI</span>
+          <span class="video-tag action">Install on Phone</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-badge" style="background: linear-gradient(135deg, #F59E0B, #EF4444);">
+        <span class="week-num">4</span>
+        <span class="week-label">Week</span>
+      </div>
+      <div class="week-content">
+        <h3>Integration & Launch</h3>
+        <p class="week-desc">Add finishing touches, create a landing page, and launch to the public!</p>
+        <div class="week-videos">
+          <span class="video-tag">AI Integration</span>
+          <span class="video-tag">Landing Page</span>
+          <span class="video-tag action">Launch to 50 People</span>
+          <span class="video-tag">Next Steps</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">OusiaWorld 0→1 App Builder</div>
+  <div class="slide-number">05 / 09</div>
+</section>
+
+<!-- SLIDE 6: How It Works -->
+<section class="slide" id="slide-6">
+  <div class="slide-inner">
+    <div class="section-label">Program Format</div>
+    <h2>How the Program <span class="highlight">Works</span></h2>
+    <p class="section-desc">Each week follows a simple two-step flow: pre-study at your own pace, then practice together.</p>
+
+    <div class="card-grid card-grid-2">
+      <div class="card" style="border-top: 3px solid #6C3CE1;">
+        <div class="card-icon" style="background: rgba(108,60,225,0.15);">📖</div>
+        <h3>Pre-Study (Before Workshop)</h3>
+        <p style="margin-bottom: 16px;">Complete before the live session:</p>
+        <ul style="list-style: none; padding: 0;">
+          <li style="padding: 8px 0; color: var(--text-secondary); font-size: 16px; display: flex; gap: 10px;">
+            <span style="color: var(--primary-light);">01</span> Watch the video (5-10 min)
+          </li>
+          <li style="padding: 8px 0; color: var(--text-secondary); font-size: 16px; display: flex; gap: 10px;">
+            <span style="color: var(--primary-light);">02</span> Follow along with prompts & templates
+          </li>
+          <li style="padding: 8px 0; color: var(--text-secondary); font-size: 16px; display: flex; gap: 10px;">
+            <span style="color: var(--primary-light);">03</span> Try it yourself on your phone or PC
+          </li>
+        </ul>
+      </div>
+      <div class="card" style="border-top: 3px solid #F59E0B;">
+        <div class="card-icon" style="background: rgba(245,158,11,0.15);">🤝</div>
+        <h3>Workshop (Live Session)</h3>
+        <p style="margin-bottom: 16px;">Hands-on building with your peers:</p>
+        <ul style="list-style: none; padding: 0;">
+          <li style="padding: 8px 0; color: var(--text-secondary); font-size: 16px; display: flex; gap: 10px;">
+            <span style="color: var(--accent);">01</span> Practice together with support
+          </li>
+          <li style="padding: 8px 0; color: var(--text-secondary); font-size: 16px; display: flex; gap: 10px;">
+            <span style="color: var(--accent);">02</span> Share progress & get peer feedback
+          </li>
+          <li style="padding: 8px 0; color: var(--text-secondary); font-size: 16px; display: flex; gap: 10px;">
+            <span style="color: var(--accent);">03</span> Complete the weekly Action task
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">OusiaWorld 0→1 App Builder</div>
+  <div class="slide-number">06 / 09</div>
+</section>
+
+<!-- SLIDE 7: What You Need -->
+<section class="slide" id="slide-7">
+  <div class="slide-inner">
+    <div class="section-label">Getting Started</div>
+    <h2>What You <span class="highlight">Need</span></h2>
+    <p class="section-desc">No coding experience. No design skills. No business degree. Just these four things:</p>
+
+    <ul class="checklist" style="max-width: 700px;">
+      <li>
+        <span class="check-icon done">✓</span>
+        <span>A <strong>Google account</strong> (Gmail)</span>
+      </li>
+      <li>
+        <span class="check-icon done">✓</span>
+        <span>A <strong>smartphone or computer</strong> with internet</span>
+      </li>
+      <li>
+        <span class="check-icon done">✓</span>
+        <span>Access to <strong>Gemini</strong> (gemini.google.com)</span>
+      </li>
+      <li>
+        <span class="check-icon done">✓</span>
+        <span>Willingness to <strong>try, fail, and try again</strong></span>
+      </li>
+    </ul>
+  </div>
+  <div class="slide-footer">OusiaWorld 0→1 App Builder</div>
+  <div class="slide-number">07 / 09</div>
+</section>
+
+<!-- SLIDE 8: Mindset -->
+<section class="slide" id="slide-8">
+  <div class="slide-inner">
+    <div class="section-label">Mindset</div>
+    <h2>Your Builder <span class="highlight">Mindset</span></h2>
+    <p class="section-desc">Adopt these four principles and you'll succeed in this program.</p>
+
+    <div class="mindset-grid">
+      <div class="mindset-card">
+        <h3>🔨 Be a Builder, Not a Student</h3>
+        <p>You are not here to memorize theory. You are here to build something real that solves a problem for real people.</p>
+      </div>
+      <div class="mindset-card">
+        <h3>🚢 Embrace "Good Enough"</h3>
+        <p>Your first app will not be perfect. That's the point. Ship fast, learn fast, improve fast.</p>
+      </div>
+      <div class="mindset-card">
+        <h3>🤝 Help Each Other</h3>
+        <p>The best ideas come from collaboration. Share your work, give feedback, and learn from your peers.</p>
+      </div>
+      <div class="mindset-card">
+        <h3>📍 Think Local, Act Now</h3>
+        <p>Lagos traffic. Campus frustrations. Market inefficiencies. Your lived experience is your superpower.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">OusiaWorld 0→1 App Builder</div>
+  <div class="slide-number">08 / 09</div>
+</section>
+
+<!-- SLIDE 9: Example Ideas -->
+<section class="slide" id="slide-9">
+  <div class="slide-inner">
+    <div class="section-label">Inspiration</div>
+    <h2>Example <span class="highlight">Project Ideas</span></h2>
+    <p class="section-desc">To get your imagination flowing — real problems, real solutions.</p>
+
+    <table class="example-table">
+      <thead>
+        <tr>
+          <th>Problem</th>
+          <th>App Idea</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Students can't find affordable textbooks</td>
+          <td>📚 Campus Book Exchange</td>
+        </tr>
+        <tr>
+          <td>Long queues at campus cafeterias</td>
+          <td>🍽️ Pre-Order Lunch</td>
+        </tr>
+        <tr>
+          <td>Farmers don't know market prices</td>
+          <td>🌾 Agri-Price Checker</td>
+        </tr>
+        <tr>
+          <td>Commuters waste time waiting</td>
+          <td>🚗 Ride Match</td>
+        </tr>
+        <tr>
+          <td>Small businesses struggle with bookkeeping</td>
+          <td>📒 Simple Books</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slide-footer">OusiaWorld 0→1 App Builder</div>
+  <div class="slide-number">09 / 09</div>
+</section>
+
+<!-- SLIDE 10: CTA -->
+<section class="slide cta-slide" id="slide-10">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="slide-inner" style="text-align: center;">
+    <h2>Welcome to OusiaWorld.<br><span class="highlight">Let's build.</span></h2>
+    <ul class="cta-points">
+      <li><span class="cta-dot"></span>A working app on your phone</li>
+      <li><span class="cta-dot"></span>A landing page with real users</li>
+      <li><span class="cta-dot"></span>The confidence to call yourself a builder</li>
+    </ul>
+    <p style="color: var(--text-secondary); font-size: 20px; margin-bottom: 40px;">
+      Next up → <strong style="color: var(--accent);">"Let's Try AI!"</strong> — Your first hands-on session with Gemini
+    </p>
+  </div>
+</section>
+
+<script>
+  // Create navigation dots
+  const slides = document.querySelectorAll('.slide');
+  const navDots = document.getElementById('navDots');
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot';
+    dot.addEventListener('click', () => {
+      slides[i].scrollIntoView({ behavior: 'smooth' });
+    });
+    navDots.appendChild(dot);
+  });
+
+  // Update active dot on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const index = Array.from(slides).indexOf(entry.target);
+        document.querySelectorAll('.nav-dot').forEach((d, i) => {
+          d.classList.toggle('active', i === index);
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+
+  slides.forEach(s => observer.observe(s));
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    const current = Array.from(slides).findIndex(s => {
+      const rect = s.getBoundingClientRect();
+      return rect.top >= -100 && rect.top <= window.innerHeight / 2;
+    });
+    if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault();
+      if (current < slides.length - 1) slides[current + 1].scrollIntoView({ behavior: 'smooth' });
+    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault();
+      if (current > 0) slides[current - 1].scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+</script>
+</body>
+</html>
